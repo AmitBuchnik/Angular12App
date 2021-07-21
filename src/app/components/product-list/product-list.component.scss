@@ -1,0 +1,38 @@
+.product-list {
+  padding-top: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  /* flex-wrap: wrap; */
+}
+
+.add-btn {
+  background-color: palegreen;
+  box-shadow: 3px 3px black;
+  font-weight: 500;
+}
+
+.search {
+  border-radius: 15px;
+  background-image: url('/assets/img/search.png');
+  background-size: 30px;
+  background-repeat: no-repeat;
+  background-position: left center;
+  outline: 0;
+  text-indent: 25px;
+}
+
+.pagination {
+  justify-content: center;
+  cursor: pointer;
+
+  .prev,
+  .next {
+    display: flex;
+    padding: 8px 16px;
+
+    div {
+      padding: 8px 16px;
+    }
+  }
+}

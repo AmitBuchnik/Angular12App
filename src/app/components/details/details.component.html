@@ -1,0 +1,84 @@
+<div class="container">
+  <div class="title"
+    *ngIf="product">{{ product?.name + ' Details' }}</div>
+  <img src="assets/img/mountains-under-mist-morning-amazing-260nw-1725825019.jpg"
+    width="200"
+    height="100">
+  <form action=""
+    (ngSubmit)="onSubmit()"
+    [formGroup]="reactiveForm"
+    (keydown.enter)="$event.preventDefault()"
+    autocomplete="off">
+    <div class="form-group">
+      <label for="name"
+        class="required">Name</label>
+      <input type="text"
+        class="form-control"
+        id="name"
+        formControlName="name"
+        [class.error-border]="reactiveForm.get('name')?.invalid &&
+        (reactiveForm.get('name')?.dirty || reactiveForm.get('name')?.touched)"
+        placeholder="Enter Name">
+      <ng-container *ngIf="reactiveForm.controls['name'].invalid && (reactiveForm.controls['name'].dirty ||
+          reactiveForm.controls['name'].touched)"
+        class="text-danger">
+        <small class="text-danger"
+          *ngIf="reactiveForm.get('name')?.hasError('required')">
+          This field is required.
+        </small>
+        <small class="text-danger"
+          *ngIf="reactiveForm.get('name')?.hasError('maxlength')">
+          The minimum length for this field is {{reactiveForm.get('name').errors.maxlength.requiredLength}} characters.
+        </small>
+      </ng-container>
+
+    </div>
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea class="form-control"
+        id="description"
+        rows="4"
+        cols="50"
+        formControlName="description"
+        [class.error-border]="reactiveForm.get('description')?.invalid &&
+        (reactiveForm.get('description')?.dirty || reactiveForm.get('description')?.touched)"
+        placeholder="Enter Description">
+    </textarea>
+      <ng-container *ngIf="reactiveForm.controls['description'].invalid && (reactiveForm.controls['description'].dirty ||
+          reactiveForm.controls['description'].touched)"
+        class="text-danger">
+        <small class="text-danger"
+          *ngIf="reactiveForm.get('description')?.hasError('maxlength')">
+          The minimum length for this field is {{reactiveForm.get('description').errors.maxlength.requiredLength}}
+          characters.
+        </small>
+      </ng-container>
+    </div>
+    <div class="form-group">
+      <label for="price"
+        class="required">Price</label>
+      <input type="number"
+        class="form-control"
+        id="price"
+        formControlName="price"
+        [class.error-border]="reactiveForm.get('price')?.invalid &&
+        (reactiveForm.get('price')?.dirty || reactiveForm.get('price')?.touched)"
+        placeholder="Enter Price">
+      <ng-container *ngIf="reactiveForm.controls['price'].invalid && (reactiveForm.controls['price'].dirty ||
+          reactiveForm.controls['price'].touched)"
+        class="text-danger">
+        <small class="text-danger"
+          *ngIf="reactiveForm.get('price')?.hasError('required')">
+          This field is required.
+        </small>
+        <small class="text-danger"
+          *ngIf="reactiveForm.get('price')?.hasError('min')">
+          Value must be minimum {{reactiveForm.get('price').errors.min.min}}.
+        </small>
+      </ng-container>
+    </div>
+    <button type="submit"
+      [disabled]="!reactiveForm?.valid"
+      class="save-btn">Save</button>
+  </form>
+</div>

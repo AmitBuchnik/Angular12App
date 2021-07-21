@@ -1,0 +1,36 @@
+  <div class="d-flex justify-content-between">
+    <button class="add-btn"
+      (click)="addProduct()">+ Add</button>
+
+    <input type="text"
+      class="search"
+      placeholder="">
+
+    <div class="">
+      <label for="cars">Sort By</label>
+      <select name="cars"
+        id="cars"
+        (change)="onChangeSortBy($event.target.value)">
+        <option value="name">Name</option>
+        <option value="date">Recently Added</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="product-list">
+    <app-product *ngFor="let p of productsInPage"
+      class="mb-2"
+      [product]="p"
+      (delete)="deleteProduct($event)"
+      (click)="selectProduct(p)">
+    </app-product>
+  </div>
+
+  <div class="ng-container"
+    *ngIf="productList?.length > 0">
+    <app-paginator [totalRecords]="productList?.length"
+      [rows]="paginationRows"
+      (nextPage)="nextPage($event)"
+      (prevPage)="prevPage($event)">
+    </app-paginator>
+  </div>
