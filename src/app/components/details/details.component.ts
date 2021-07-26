@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
@@ -8,7 +8,8 @@ import { ProductsService } from 'src/app/services/products.service';
 @Component({
   selector: 'app-details',
   templateUrl: './details.component.html',
-  styleUrls: ['./details.component.scss']
+  styleUrls: ['./details.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class DetailsComponent implements OnInit, OnDestroy {
 
@@ -32,7 +33,7 @@ export class DetailsComponent implements OnInit, OnDestroy {
   }
 
   listenToProductsChanged() {    
-    this.productsChangedSubscription = this.productsService.productsObservable$.subscribe(products => {
+    this.productsChangedSubscription = this.productsService.productsChangedObservable$.subscribe(products => {
       // current product was deleted
       if(this.product && !products?.find(p => p.id === this.product.id))    {
         this.router.navigate(['']);

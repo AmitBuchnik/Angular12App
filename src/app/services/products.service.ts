@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Observable, of, Subject } from 'rxjs';
+import { PaginationService } from '../components/paginator/pagination.service';
 
 import { Product } from '../models/product.interface';
 
@@ -8,6 +9,7 @@ import { Product } from '../models/product.interface';
   providedIn: 'root'
 })
 export class ProductsService {
+  
 
   selectedProduct: Product | null;
   
@@ -91,26 +93,26 @@ export class ProductsService {
   ];
 
   private productsChanged = new Subject<Product[]>();
-  productsObservable$ = this.productsChanged.asObservable();
+  productsChangedObservable$ = this.productsChanged.asObservable();
 
-  constructor() { }
+  constructor(private paginationService: PaginationService) { }
 
   getProducts$(): Observable<Product[]> {
-    return of(this.products);
+    return of(this.products.slice(0));
   }
 
   getProductById$(id: number): Observable<Product> {
-    return of(this.products.find(p=>p.id===id) as Product);
+    return of(this.products.find(p => p.id === id) as Product);
   }
 
   deleteProduct(id: number) {
-    const index = this.products.findIndex(p=>p.id===id);
+    const index = this.products.findIndex(p => p.id === id);
     this.products.splice(index, 1);
     this.productsChanged.next(this.products.slice(0));
   }
   
   addProduct(product: Product) {
-    const ids = this.products.map(p=>p.id);
+    const ids = this.products.map(p => p.id);
     
     let maxId = ids?.length > 0 ? Math.max(...ids) : 1;
     product.id = ++maxId;
@@ -122,10 +124,32 @@ export class ProductsService {
   }
 
   updateProduct(product: Product) {
-    const index = this.products.findIndex(p=>p.id === product.id);
-    if(index != -1) {
+    const index = this.products.findIndex(p => p.id === product.id);
+    if (index != -1) {
       this.products[index] = product;
       this.productsChanged.next(this.products.slice(0));
-    } 
+    }
+  }
+
+  sortProducts(sortBy: string, products: Product[]) {
+    switch (sortBy) {
+      case 'name':
+        return products.sort((a, b) => <any>a[sortBy].localeCompare(<any>b[sortBy]));
+    
+      case 'date':
+        return products.sort((a, b) => <any>new Date(b.creationDate) - <any>new Date(a.creationDate));
+      
+      default:
+        console.log('no such sort option');
+        return products;
+    }
+  }
+
+  getProductsInPage(currentPage: number, paginationRows: number): Product[] {
+    const pageCount = this.paginationService.getPageCount(this.products.length, paginationRows);
+    currentPage = this.paginationService.checkCurrentPage(currentPage, pageCount);
+
+    return this.products.slice(paginationRows * currentPage,
+      paginationRows * currentPage + paginationRows);
   }
 }

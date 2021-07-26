@@ -7,9 +7,9 @@
       placeholder="">
 
     <div class="">
-      <label for="cars">Sort By</label>
-      <select name="cars"
-        id="cars"
+      <label for="sort">Sort By</label>
+      <select name="sort"
+        id="sort"
         (change)="onChangeSortBy($event.target.value)">
         <option value="name">Name</option>
         <option value="date">Recently Added</option>
@@ -21,16 +21,16 @@
     <app-product *ngFor="let p of productsInPage"
       class="mb-2"
       [product]="p"
+      [selected]="p?.id === productsService?.selectedProduct?.id"
       (delete)="deleteProduct($event)"
       (click)="selectProduct(p)">
     </app-product>
   </div>
 
-  <div class="ng-container"
-    *ngIf="productList?.length > 0">
-    <app-paginator [totalRecords]="productList?.length"
+  <div class="ng-container">
+    <app-paginator #paginator
+      [totalRecords]="productList?.length"
       [rows]="paginationRows"
-      (nextPage)="nextPage($event)"
-      (prevPage)="prevPage($event)">
+      (onPageChange)="onPageChange($event)">
     </app-paginator>
   </div>
